@@ -9,13 +9,28 @@ project(${name})
 # ============================
 # = find dependency packages =
 
+if(NOT TARGET utki::utki)
 find_package(utki CONFIG REQUIRED)
+endif()
+
+if(NOT TARGET papki::papki)
 find_package(papki CONFIG REQUIRED)
+endif()
+
 find_package(ZLIB REQUIRED)
 
 # ============================
 
-file(GLOB_RECURSE srcs "../src/${name}/*.cpp")
+set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}/../src/${name}")
+file(GLOB_RECURSE src RELATIVE "${srcdir}" CONFIGURE_DEPENDS "${srcdir}/*.cpp" "${srcdir}/*.hpp")
+
+set(srcs)
+foreach(file ${src})
+    get_filename_component(path "${file}" DIRECTORY)
+    string(REPLACE "/" "\\" path "Source Files/${path}")
+    source_group("${path}" FILES "${srcdir}/${file}")
+    list(APPEND srcs "${srcdir}/${file}")
+endforeach()
 
 add_library(
     ${name}
@@ -23,14 +38,14 @@ add_library(
     ${srcs}
 )
 
-target_compile_features(${name} PUBLIC cxx_std_17)
+target_compile_features(${name} PUBLIC cxx_std_20)
 set_target_properties(${name} PROPERTIES CXX_STANDARD_REQUIRED ON)
 set_target_properties(${name} PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(
     ${name}
-    INTERFACE
-        $<BUILD_INTERFACE:>
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../src>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -40,6 +55,8 @@ target_link_libraries(
         utki::utki
         papki::papki
 )
+
+if(NOT TML_DISABLE_INSTALL)
 
 # install library header files preserving directory hierarchy
 install(
@@ -69,3 +86,5 @@ install(
     NAMESPACE
         ${name}::
 )
+
+endif()
