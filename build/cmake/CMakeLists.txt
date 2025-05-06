@@ -21,7 +21,7 @@ find_package(ZLIB REQUIRED)
 
 # ============================
 
-set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}/../src/${name}")
+set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}/../../src/${name}")
 file(GLOB_RECURSE src RELATIVE "${srcdir}" CONFIGURE_DEPENDS "${srcdir}/*.cpp" "${srcdir}/*.hpp")
 
 set(srcs)
@@ -45,7 +45,7 @@ set_target_properties(${name} PROPERTIES CXX_EXTENSIONS OFF)
 target_include_directories(
     ${name}
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../src>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../src>
         $<INSTALL_INTERFACE:include>
 )
 
