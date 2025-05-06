@@ -61,7 +61,7 @@ if(NOT TML_DISABLE_INSTALL)
 # install library header files preserving directory hierarchy
 install(
     DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}/../src/${name}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../src/${name}"
     DESTINATION
         "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING PATTERN
